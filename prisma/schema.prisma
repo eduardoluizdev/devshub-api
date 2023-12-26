@@ -10,23 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
+enum UserRoleType {
   ADMIN
   USER
-}
 
-enum ServiceRenewal {
-  MONTHLY
-  YEARLY
+  @@map("user_role_type")
 }
 
 model User {
-  id             String   @id @default(uuid())
+  id             String       @id @default(uuid())
   name           String
-  email          String   @unique
-  hashedPassword String   @map("hashed_password")
-  role           UserRole @default(USER)
-  createdAt      DateTime @default(now())
+  email          String       @unique
+  hashedPassword String       @map("hashed_password")
+  role           UserRoleType @default(USER)
+  createdAt      DateTime     @default(now())
 
   Customer Customer[]
 
@@ -42,7 +39,7 @@ model Customer {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
   service Service[]
@@ -50,13 +47,20 @@ model Customer {
   @@map("customers")
 }
 
+enum ServiceRenewalType {
+  MONTHLY
+  YEARLY
+
+  @@map("service_renewal_type")
+}
+
 model Service {
-  id        String         @id @default(uuid())
+  id        String             @id @default(uuid())
   name      String
   price     Float
-  renewal   ServiceRenewal @default(MONTHLY)
-  createdAt DateTime       @default(now()) @map("created_at")
-  updatedAt DateTime       @default(now()) @map("updated_at")
+  renewal   ServiceRenewalType @default(MONTHLY)
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @default(now()) @map("updated_at")
 
   customer   Customer? @relation(fields: [customerId], references: [id])
   customerId String?   @map("customer_id")
