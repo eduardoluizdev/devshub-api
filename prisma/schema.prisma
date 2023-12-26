@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum ServiceRenewal {
+  MONTHLY
+  YEARLY
+}
+
+model User {
+  id             String   @id @default(uuid())
+  name           String
+  email          String   @unique
+  hashedPassword String   @map("hashed_password")
+  role           UserRole @default(USER)
+  createdAt      DateTime @default(now())
+
+  Customer Customer[]
+
+  @@map("users")
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  phone     String
+  sector    String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  service Service[]
+
+  @@map("customers")
+}
+
+model Service {
+  id        String         @id @default(uuid())
+  name      String
+  price     Float
+  renewal   ServiceRenewal @default(MONTHLY)
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @default(now()) @map("updated_at")
+
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId String?   @map("customer_id")
+
+  @@map("services")
+}
