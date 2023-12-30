@@ -8,7 +8,11 @@ import { compare, hash } from 'bcryptjs'
 import { JwtService } from '@nestjs/jwt'
 import { SigninDto } from './dto/signin'
 import { SignupDto } from './dto/signup'
-import { $Enums } from '@prisma/client'
+
+enum UserRoleType {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
 
 @Injectable()
 export class AuthService {
@@ -36,7 +40,7 @@ export class AuthService {
 
     const accessToken = await this.generateAccessToken({
       userId: user.id,
-      role: user.role,
+      role: user.role as UserRoleType,
     })
 
     return { access_token: accessToken }
@@ -66,7 +70,7 @@ export class AuthService {
 
     const accessToken = await this.generateAccessToken({
       userId: user.id,
-      role: user.role,
+      role: user.role as UserRoleType,
     })
 
     return { access_token: accessToken }
@@ -77,7 +81,7 @@ export class AuthService {
     role,
   }: {
     userId: string
-    role: $Enums.UserRoleType
+    role: UserRoleType
   }) {
     return this.jwtService.signAsync({ sub: userId, role })
   }
