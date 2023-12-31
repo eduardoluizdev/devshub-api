@@ -6,9 +6,16 @@ import { AuthModule } from './modules/auth/auth.module'
 import { AuthGuard } from './modules/auth/auth.guard'
 import { UsersModule } from './modules/users/users.module'
 import { CustomersModule } from './modules/customers/customers.module'
+import { ServicesModule } from './modules/services/services.module'
 
 @Module({
-  imports: [DatabaseModule, AuthModule, UsersModule, CustomersModule],
+  imports: [
+    DatabaseModule,
+    AuthModule,
+    UsersModule,
+    CustomersModule,
+    ServicesModule,
+  ],
   controllers: [],
   providers: [
     {
