@@ -62,7 +62,7 @@ model Service {
   createdAt DateTime           @default(now()) @map("created_at")
   updatedAt DateTime           @default(now()) @map("updated_at")
 
-  customer   Customer @relation(fields: [customerId], references: [id])
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   customerId String   @map("customer_id")
 
   @@map("services")
