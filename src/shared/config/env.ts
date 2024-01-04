@@ -20,12 +20,17 @@ class Env {
   @IsNumber()
   @IsNotEmpty()
   port: number
+
+  @IsString()
+  @IsNotEmpty()
+  corsOrigin: 'http://localhost:3000' | 'https://app.devshub.io'
 }
 
 export const env: Env = plainToInstance(Env, {
   dbURL: process.env.DATABASE_URL,
   jwtSecret: process.env.JWT_SECRET,
   port: Number(process.env.PORT),
+  corsOrigin: process.env.CORS_ORIGIN,
 })
 
 const errors = validateSync(env)
