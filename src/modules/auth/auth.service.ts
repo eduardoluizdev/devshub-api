@@ -43,7 +43,13 @@ export class AuthService {
       role: user.role as UserRoleType,
     })
 
-    return { access_token: accessToken }
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      access_token: accessToken,
+    }
   }
 
   async signup(signupDto: SignupDto) {
