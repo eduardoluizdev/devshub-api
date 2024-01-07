@@ -51,8 +51,8 @@ Authorization: Bearer {{authToken}}
 
 # ###
 
-# # @name fetch_customer
-# GET {{baseURL}}/customers?page=1
-# Content-Type: application/json
-# Authorization: Bearer {{authToken}}
+# @name fetch_customer
+GET {{baseURL}}/customers
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
 

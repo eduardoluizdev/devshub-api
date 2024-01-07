@@ -1,4 +1,12 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator'
+import { CreateServiceDto } from '@/modules/services/dto/create-service.dto'
+import {
+  IsArray,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator'
 
 export class CreateCustomerDto {
   @IsString()
@@ -18,4 +26,8 @@ export class CreateCustomerDto {
   @IsString()
   @IsNotEmpty()
   sector: string
+
+  @IsArray()
+  @IsOptional()
+  services: CreateServiceDto[] | undefined
 }
