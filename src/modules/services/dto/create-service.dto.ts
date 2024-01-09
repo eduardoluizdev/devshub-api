@@ -8,10 +8,6 @@ export enum ServiceRenewalType {
 export class CreateServiceDto {
   @IsNotEmpty()
   @IsString()
-  customerId: string
-
-  @IsNotEmpty()
-  @IsString()
   name: string
 
   @IsNotEmpty()
