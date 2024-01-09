@@ -20,8 +20,14 @@ export class ServicesController {
 
   @Post()
   create(
-    @Query('customerId', ParseUUIDPipe) customerId: string,
-    @Body() createServiceDto: CreateServiceDto,
+    @Query(
+      'customerId',
+      new ParseUUIDPipe({
+        optional: true,
+      }),
+    )
+    customerId?: string | undefined,
+    @Body() createServiceDto?: CreateServiceDto,
   ) {
     return this.servicesService.create(customerId, createServiceDto)
   }

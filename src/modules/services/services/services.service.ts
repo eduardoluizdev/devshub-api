@@ -14,17 +14,19 @@ export class ServicesService {
   ) {}
 
   async create(customerId: string, createServiceDto: CreateServiceDto) {
-    const isCustomerExists = await this.customerAlreadyExists(customerId)
+    if (customerId) {
+      const isCustomerExists = await this.customerAlreadyExists(customerId)
 
-    if (!isCustomerExists) {
-      throw new NotFoundException('Customer not found.')
+      if (!isCustomerExists) {
+        throw new NotFoundException('Customer not found.')
+      }
     }
 
     const { name, price, renewal } = createServiceDto
 
     await this.servicesRepo.create({
       data: {
-        customerId,
+        customerId: customerId ? customerId : undefined,
         name,
         price,
         renewal,
@@ -37,9 +39,16 @@ export class ServicesService {
   async findAll(userId: string) {
     const services = await this.servicesRepo.findMany({
       where: {
-        customer: {
-          userId,
-        },
+        OR: [
+          {
+            customer: {
+              userId,
+            },
+          },
+          {
+            customerId: null,
+          },
+        ],
       },
       select: {
         id: true,
