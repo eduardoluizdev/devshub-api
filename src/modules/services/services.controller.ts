@@ -20,6 +20,7 @@ export class ServicesController {
 
   @Post()
   create(
+    @ActiveUserId() userId: string,
     @Query(
       'customerId',
       new ParseUUIDPipe({
@@ -29,7 +30,7 @@ export class ServicesController {
     customerId?: string | undefined,
     @Body() createServiceDto?: CreateServiceDto,
   ) {
-    return this.servicesService.create(customerId, createServiceDto)
+    return this.servicesService.create(userId, customerId, createServiceDto)
   }
 
   @Get('me')
@@ -38,24 +39,40 @@ export class ServicesController {
   }
 
   @Get()
-  findAllByCustomerId(@Query('customerId', ParseUUIDPipe) customerId: string) {
-    return this.servicesService.findAllByCustomerId(customerId)
+  findAllByCustomerId(
+    @ActiveUserId() userId: string,
+    @Query('customerId', ParseUUIDPipe) customerId: string,
+  ) {
+    return this.servicesService.findAllByCustomerId(userId, customerId)
   }
 
   @Put(':serviceId')
   update(
+    @ActiveUserId() userId: string,
     @Param('serviceId', ParseUUIDPipe) serviceId: string,
     @Query('customerId', ParseUUIDPipe) customerId: string,
     @Body() updateServiceDto: UpdateServiceDto,
   ) {
-    return this.servicesService.update(serviceId, customerId, updateServiceDto)
+    return this.servicesService.update(
+      userId,
+      serviceId,
+      customerId,
+      updateServiceDto,
+    )
   }
 
   @Delete(':serviceId')
   remove(
+    @ActiveUserId() userId: string,
     @Param('serviceId', ParseUUIDPipe) serviceId: string,
-    @Query('customerId', ParseUUIDPipe) customerId: string,
+    @Query(
+      'customerId',
+      new ParseUUIDPipe({
+        optional: true,
+      }),
+    )
+    customerId: string,
   ) {
-    return this.servicesService.remove(serviceId, customerId)
+    return this.servicesService.remove(userId, serviceId, customerId)
   }
 }

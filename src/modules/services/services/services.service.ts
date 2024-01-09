@@ -13,9 +13,16 @@ export class ServicesService {
     private readonly validateCustomerServiceOwnership: ValidateCustomerServiceOwnershipService,
   ) {}
 
-  async create(customerId: string, createServiceDto: CreateServiceDto) {
+  async create(
+    userId: string,
+    customerId: string,
+    createServiceDto: CreateServiceDto,
+  ) {
     if (customerId) {
-      const isCustomerExists = await this.customerAlreadyExists(customerId)
+      const isCustomerExists = await this.customerAlreadyExists(
+        customerId,
+        userId,
+      )
 
       if (!isCustomerExists) {
         throw new NotFoundException('Customer not found.')
@@ -26,10 +33,11 @@ export class ServicesService {
 
     await this.servicesRepo.create({
       data: {
-        customerId: customerId ? customerId : undefined,
         name,
         price,
         renewal,
+        customerId: customerId ? customerId : undefined,
+        userId,
       },
     })
 
@@ -67,8 +75,11 @@ export class ServicesService {
     return { services }
   }
 
-  async findAllByCustomerId(customerId: string) {
-    const isCustomerExists = await this.customerAlreadyExists(customerId)
+  async findAllByCustomerId(userId: string, customerId: string) {
+    const isCustomerExists = await this.customerAlreadyExists(
+      customerId,
+      userId,
+    )
 
     if (!isCustomerExists) {
       throw new NotFoundException('Customer not found.')
@@ -89,22 +100,31 @@ export class ServicesService {
   }
 
   async update(
+    userId: string,
     serviceId: string,
     customerId: string,
     updateServiceDto: UpdateServiceDto,
   ) {
-    const isCustomerExists = await this.customerAlreadyExists(customerId)
+    if (customerId) {
+      const isCustomerExists = await this.customerAlreadyExists(
+        customerId,
+        userId,
+      )
 
-    if (!isCustomerExists) {
-      throw new NotFoundException('Customer not found.')
+      if (!isCustomerExists) {
+        throw new NotFoundException('Customer not found.')
+      }
+
+      await this.validateCustomerServiceOwnership.validate(
+        customerId,
+        serviceId,
+      )
     }
-
-    await this.validateCustomerServiceOwnership.validate(customerId, serviceId)
 
     const { name, price, renewal } = updateServiceDto
 
     await this.servicesRepo.update({
-      where: { id: serviceId },
+      where: { id: serviceId, userId },
       data: {
         name,
         price,
@@ -115,23 +135,34 @@ export class ServicesService {
     return null
   }
 
-  async remove(serviceId: string, customerId: string) {
-    const isCustomerExists = await this.customerAlreadyExists(customerId)
+  async remove(userId: string, serviceId: string, customerId: string) {
+    if (customerId) {
+      const isCustomerExists = await this.customerAlreadyExists(
+        customerId,
+        userId,
+      )
 
-    if (!isCustomerExists) {
-      throw new NotFoundException('Customer not found.')
+      if (!isCustomerExists) {
+        throw new NotFoundException('Customer not found.')
+      }
+
+      await this.validateCustomerServiceOwnership.validate(
+        customerId,
+        serviceId,
+      )
     }
 
-    await this.validateCustomerServiceOwnership.validate(customerId, serviceId)
-
-    await this.servicesRepo.delete({ where: { id: serviceId } })
+    await this.servicesRepo.delete({ where: { id: serviceId, userId } })
 
     return null
   }
 
-  private async customerAlreadyExists(customerId: string) {
+  private async customerAlreadyExists(customerId: string, userId: string) {
     const customer = await this.customersRepo.findUnique({
-      where: { id: customerId },
+      where: {
+        id: customerId,
+        userId,
+      },
     })
 
     return !!customer

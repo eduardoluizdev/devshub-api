@@ -26,6 +26,7 @@ model User {
   createdAt      DateTime     @default(now())
 
   customers Customer[]
+  Service   Service[]
 
   @@map("users")
 }
@@ -64,6 +65,9 @@ model Service {
 
   customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
   customerId String?   @map("customer_id")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
 
   @@map("services")
 }
