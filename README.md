@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="#">
+  <a href="https://app.devshub.io">
     Devshub
   </a>
 </p>
@@ -13,12 +13,12 @@
 </p>
 
 <p align="center">
-  <a href="https://api.devshub.io/">
-    <img src="https://img.shields.io/website?down_color=FF5555&down_message=down&label=website%20production&up_color=44D068&up_message=up&url=https%3A%2F%2Fapi.devshub.io/" />
-  </a> &nbsp;
-  <a href="https://devshub.io/">
-    <img src="https://img.shields.io/website?down_color=FF5555&down_message=down&label=website&up_color=44D068&up_message=up&url=https%3A%2F%2Fdevshub.io" />
-  </a> &nbsp; &nbsp;
+  <a href="https://api.devshub.io/status">
+    <img src="https://img.shields.io/website?down_color=FF5555&down_message=down&label=API&up_color=44D068&up_message=up&url=https%3A%2F%2Fapi.devshub.io/status" />
+  </a>
+  <a href="https://app.devshub.io/">
+    <img src="https://img.shields.io/website?down_color=FF5555&down_message=down&label=Dashboard&up_color=44D068&up_message=up&url=https%3A%2F%2Fapp.devshub.io" />
+  </a>
 </p>
 
 <p align="center">
