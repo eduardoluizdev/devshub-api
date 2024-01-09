@@ -34,6 +34,30 @@ export class ServicesService {
     return null
   }
 
+  async findAll(userId: string) {
+    const services = await this.servicesRepo.findMany({
+      where: {
+        customer: {
+          userId,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        renewal: true,
+        customer: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    })
+
+    return { services }
+  }
+
   async findAllByCustomerId(customerId: string) {
     const isCustomerExists = await this.customerAlreadyExists(customerId)
 

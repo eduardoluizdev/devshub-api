@@ -1,5 +1,6 @@
 @baseURL = http://localhost:3333
 @authToken = {{authenticate.response.body.access_token}}
+@customerId = {{create_customer.response.body.id}}
 
 # @name create_user
 POST {{baseURL}}/auth/signup
@@ -34,25 +35,45 @@ Authorization: Bearer {{authToken}}
   "password": "12345678"
 }
 
+###
+
+# @name create_customer
+POST {{baseURL}}/customers
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Eduardo",
+  "email": "teste@teste.com",
+  "phone": "12345678910",
+  "sector": "TI"
+}
 
 ###
 
-# # @name create_customer
-# POST {{baseURL}}/customers
-# Content-Type: application/json
-# Authorization: Bearer {{authToken}}
+# @name edit_customer
+PUT {{baseURL}}/customers/{{customerId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
-# {
-#   "name": "Eduardo",
-#   "email": "teste@teste.com",
-#   "phone": "123456",
-#   "sector": "TI"
-# }
+{
+  "name": "Eduardo",
+  "email": "teste@teste.com",
+  "phone": "12345678910",
+  "sector": "TI"
+}
 
-# ###
+###
 
-# @name fetch_customer
-GET {{baseURL}}/customers
+# @name list_service_with_customer_id
+GET {{baseURL}}/services?customerId={{customerId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name list_all_user_services
+GET {{baseURL}}/services/me
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
