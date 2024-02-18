@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = env("PRISMA_BINARY_TARGET")
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+
+  @@map("roles")
+}
+
+enum CustomerType {
+  PERSON
+  COMPANY
+
+  @@map("customer_type")
+}
+
+enum ServiceRenewalType {
+  MONTHLY
+  YEARLY
+
+  @@map("service_renewal_type")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  password  String
+  avatarUrl String?   @map("avatar_url")
+  role      Role?     @default(CUSTOMER)
+  createdAt DateTime? @default(now()) @map("create_at")
+  updatedAt DateTime? @default(now())
+
+  Customer Customer[]
+  Service  Service[]
+
+  @@map("users")
+}
+
+model Customer {
+  id           String       @id @default(uuid())
+  name         String
+  email        String       @unique
+  phone        String       @unique
+  sector       String
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @default(now()) @map("updated_at")
+  customerType CustomerType @default(PERSON) @map("customer_type")
+  street       String?
+  number       String?
+  cep          String?
+  neighborhood String?
+  city         String?
+  state        String?
+  country      String?
+  cpf          String?
+  cnpj         String?
+  company      String?
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  services Service[]
+
+  @@map("customers")
+}
+
+model Service {
+  id        String             @id @default(uuid())
+  name      String
+  price     Decimal            @db.Decimal(10, 2)
+  renewal   ServiceRenewalType @default(MONTHLY)
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @default(now()) @map("updated_at")
+
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId String?   @map("customer_id")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  @@map("services")
+}

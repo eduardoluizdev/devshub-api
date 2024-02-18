@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "paths": {
+      "@modules/*": [
+        "modules/*"
+      ],
+      "@infra/*": [
+        "infra/*"
+      ],
+      "@config/*": [
+        "config/*"
+      ]
+    },
+    "lib": [
+      "esnext"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node"
+  }
+}
