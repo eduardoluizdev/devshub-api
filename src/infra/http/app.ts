@@ -40,6 +40,7 @@ socketServer.on("connection", (_socket) => {
 
 whatsappClient.on("qr", (qr) => {
   console.log("Waiting for authentication with QRCode...");
+  console.log({ qr });
   fs.writeFileSync(`./src/infra/http/qrcode/qr.txt`, qr);
 });
 
