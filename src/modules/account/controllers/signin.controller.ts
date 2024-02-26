@@ -6,8 +6,8 @@ export class SignInController {
     const { email, password } = request.body;
 
     const signInUseCase = new SignInUseCase();
-    const access_token = await signInUseCase.execute({ email, password });
+    const accessToken = await signInUseCase.execute({ email, password });
 
-    return response.json(access_token);
+    return response.json(accessToken);
   }
 }

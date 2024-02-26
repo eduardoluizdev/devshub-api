@@ -27,13 +27,13 @@ export class SignUpUseCase {
       },
     });
 
-    const access_token = sign({ role: user.role }, auth.secretKey, {
+    const accessToken = sign({ role: user.role }, auth.secretKey, {
       subject: user.id,
       expiresIn: auth.expiresIn,
     });
 
     return {
-      access_token,
+      accessToken,
     };
   }
 }

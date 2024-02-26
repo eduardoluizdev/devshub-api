@@ -6,8 +6,8 @@ export class SignUpController {
     const { name, email, password } = request.body;
 
     const signUpUseCase = new SignUpUseCase();
-    const access_token = await signUpUseCase.execute({ name, email, password });
+    const accessToken = await signUpUseCase.execute({ name, email, password });
 
-    return response.json(access_token);
+    return response.json(accessToken);
   }
 }
